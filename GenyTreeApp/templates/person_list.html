@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+
+    <div class="person-list">
+
+        <div id="search">
+            <input id="search-bar" type="text" autocomplete="off" placeholder={%trans 'Busqueda...'%}>
+
+            <div id="search-content"></div>
+        </div>
+
+        <div class="paginator">
+            {% if persons.has_previous %}
+                <a href="?page=1">&laquo;</a>
+                <a href="?page={{ persons.previous_page_number }}">&lsaquo;</a>
+            {% endif %}
+
+            &nbsp;{%trans 'Página'%} {{ persons.number }} {%trans 'de'%} {{ persons.paginator.num_pages }}&nbsp;
+
+            {% if persons.has_next %}
+                <a href="?page={{ persons.next_page_number }}">&rsaquo;</a>
+                <a href="?page={{ persons.paginator.num_pages }}">&raquo;</a>
+            {% endif %}
+        </div>
+
+        {% for person in persons %}
+
+            <div class="person-data">
+                <img src="{% static 'person_photos/'|add:person.img_path %}" alt="" width="56" height="68">
+                <a href="/editor?link_id={{ person.id }}"><img class="person-list-sidetree-icon" src="{% static 'images/sidetree_icon.png' %}" alt="" width="25" height="25"></a>
+                <a href="/person/{{ person.id }}"><img class="person-list-person-description-icon" src="{% static 'images/default.png' %}" alt="" width="25" height="25"></a>
+
+                <div class="main-data ">
+                    <table>
+                        <tr>
+                            <td><b>{%trans 'Nombre'%}</b>: {% if person.name %}{{ person.name }}{% else %}{%trans 'Desconocido'%}{% endif %}</td>
+                            <td><b>{%trans 'Apellidos'%}</b>: {% if person.surname %}{{ person.surname }}{% else %}{%trans 'Desconocido'%}{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td><b>{%trans 'Nacimiento'%}</b>: {% if person.birth %}{{ person.birth|date:"d/m/Y" }}{% else %}{%trans 'Desconocido'%}{% endif %}</td>
+                            <td><b>{%trans 'Defuncion'%}</b>: {% if person.death %}{{ person.death|date:"d/m/Y" }}{% else %}{%trans 'Desconocido'%}{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td><b>{%trans 'Genero'%}</b>: {% if person.gender == 'U' %}{%trans 'Desconocido'%}
+                                {% elif person.gender == 'O' %}{%trans 'Otro'%}
+                                {% elif person.gender == 'F' %}{%trans 'Femenino'%}
+                                {% elif person.gender == 'M' %}{%trans 'Masculino'%}
+                                {% endif %}</td>
+                            <td><b>{%trans 'E-mail'%}</b>: {% if person.email %}{{ person.email }}{% else %}{%trans 'Desconocido'%}{% endif %}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="supplementary-data">
+                    <b>{%trans 'Más información'%}</b>: {% if person.notes %}{{ person.notes }}{% else %}{%trans 'Sin especificar'%}{% endif %}
+                    <br><b>{%trans 'Propietario del registro'%}</b>: {{ person.creator.username }}
+                </div>
+
+                <button class="person-data-readmore-button">{%trans 'Leer más'%} &#9660;</button>
+                <button class="person-data-readmore-button" style="display: none;">{%trans 'Leer menos'%} &#9650;</button>
+            </div><br>
+
+        {% endfor %}
+
+        <div class="paginator">
+            {% if persons.has_previous %}
+                <a href="?page=1">&laquo;</a>
+                <a href="?page={{ persons.previous_page_number }}">&lsaquo;</a>
+            {% endif %}
+
+            &nbsp;{%trans 'Página'%} {{ persons.number }} {%trans 'de'%} {{ persons.paginator.num_pages }}&nbsp;
+
+            {% if persons.has_next %}
+                <a href="?page={{ persons.next_page_number }}">&rsaquo;</a>
+                <a href="?page={{ persons.paginator.num_pages }}">&raquo;</a>
+            {% endif %}
+        </div>
+        <br>
+    </div>
+
+
+
+{% endblock %}

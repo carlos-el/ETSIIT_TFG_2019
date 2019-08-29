@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Genealogy trees website">
+    <meta name="author" content="Carlos Enriquez Lopez">
+    <title>GenyTree</title>
+
+    {% load static %}
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.min.js"></script>
+
+
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <!-- Do not use in production-->
+    <!--<script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>-->
+
+    <script src="{% static 'functions.js' %}"></script>
+    {% load i18n %}
+
+</head>
+<body>
+    <div class="header">
+        <div class="topnav">
+
+            <img src="{% static 'images/hamburger_icon.png' %}" width="60" height="60" id="hamburger-icon">
+
+            <div class="left-menu" >
+                <a href="{% url 'home' %}"><img src="{% static 'images/logo.png' %}" width="200" height="80" id="logo"></a>
+            </div>
+
+            <div class="dropdown-menu">
+                <div class="middle-menu">
+                    <a href="{% url 'person_list' %}" ><strong> {%trans 'Lista de personas'%} </strong></a>
+                    <a href="{% url 'editor' %}" ><strong> {%trans 'Editor'%} </strong></a>
+                </div>
+
+                <div class="right-language-container">
+                    <div class="right-menu">
+                        {% if request.user.is_authenticated %}
+                            <a href="{% url 'logout' %}" ><strong> {%trans 'Cerrar sesión'%} </strong></a>
+                        {% else %}
+                            <a href="{% url 'login' %}" ><strong> {%trans 'Iniciar sesión'%} </strong></a>
+                            <a href="{% url 'signup' %}" ><strong> {%trans 'Registrarse'%} </strong></a>
+                        {% endif %}
+                    </div>
+                    <div class="language-menu">
+                        {% comment %}
+                        <a href=""><img src="{% static 'images/spain.png' %}" alt="" width="30" height="20"></a>
+                        <a href=""><img src="{% static 'images/great_britain.jpg' %}" alt="" width="30" height="20"></a>
+                        {% endcomment %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% block content %}
+{% endblock %}
+
+    <div class="footer">
+        <div class="col-3">
+            <img src="{% static 'images/ugr_icon.jpeg' %}" width="75" height="75" alt=""
+            ><img src="{% static 'images/etsiit_icon.png' %}" width="150" height="75" alt="">
+        </div><div class="col-3">
+            <div>🄯 2019 - Carlos Enríquez López </div>
+        </div><div class="col-3">
+            <div><b><a href="{% url 'policies' %}">{% trans 'Política de provacidad y Términos' %}</a></b></div>
+        </div>
+    </div>
+
+</body>
+</html>

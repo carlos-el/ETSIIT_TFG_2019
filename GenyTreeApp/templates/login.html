@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+
+    <div class="login-father">
+        <div class="login-child more col-">
+            <p class="title"><strong>{%trans 'Iniciar sesión'%}</strong></p>
+
+            {% if errors %}
+            <p class="error-message">
+                {% for error in errors %}
+                    -{{ error }}.<br>
+                {% endfor %}
+            </p>
+            {% endif %}
+
+            <form action="{% url 'login' %}" method="post">
+                {% csrf_token %}
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+
+                {% for field in form.visible_fields %}
+                    {{ field.label_tag }}
+                    <br>
+                    {{ field }}
+                    <br><br>
+                {% endfor %}
+                <input class="standard-button" type="submit" name="submit" value="{%trans 'Iniciar sesión'%}" />
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

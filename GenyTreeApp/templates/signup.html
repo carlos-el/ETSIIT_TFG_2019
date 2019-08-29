@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+
+    <div class="login-father">
+        <div class="login-child signup-child col-">
+            <p class="title"><strong>{%trans 'Crea una cuenta en GenyTree'%}</strong></p>
+
+            {% if errors %}
+            <p class="error-message">
+                {% for error in errors %}
+                    -{{ error }}.<br>
+                {% endfor %}
+            </p>
+            {% endif %}
+
+            <form action="{% url 'signup' %}" method="post">
+                {% csrf_token %}
+
+                {% for field in form.visible_fields %}
+                    {{ field.label_tag }}
+                    <br>
+                    {{ field }}
+                    <br><br>
+                {% endfor %}
+                <input class="standard-button" type="submit" name="submit" value="{%trans 'Crear cuenta'%}" />
+            </form>
+
+            <p>{%trans '¿Ya tienes una cuenta de GenyTree?'%} <strong><a href="{% url 'login' %}">{%trans 'Inicia sesión'%}.</a></strong></p>
+        </div>
+    </div>
+
+{% endblock %}

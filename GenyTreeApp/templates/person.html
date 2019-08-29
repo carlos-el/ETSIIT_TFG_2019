@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+
+    <div class="person">
+
+            <div class="person-data">
+                <img src="{% static 'person_photos/'|add:person.img_path %}" alt="" width="56" height="68">
+
+                <div class="main-data ">
+                    <table>
+                        <tr>
+                            <td><b>{%trans 'Nombre'%}</b>: {% if person.name %}{{ person.name }}{% else %}{%trans 'Desconocido'%}{% endif %}</td>
+                            <td><b>{%trans 'Apellidos'%}</b>: {% if person.surname %}{{ person.surname }}{% else %}{%trans 'Desconocido'%}{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td><b>{%trans 'Nacimiento'%}</b>:
+                                {% if person.birth %}
+                                    {{ person.birth|date:"d/m/Y" }}
+                                {% else %}
+                                    {%trans 'Desconocido'%}
+                                {% endif %}
+                            </td>
+                            <td><b>{%trans 'Defuncion'%}</b>:
+                                {% if person.death.day and person.death.month and person.death.year %}
+                                    {{ person.death|date:"d/m/Y" }}
+                                {% else %}
+                                    {%trans 'Desconocido'%}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>{%trans 'Genero'%}</b>: {% if person.gender == 'U' %}{%trans 'Desconocido'%}
+                                {% elif person.gender == 'O' %}{%trans 'Otro'%}
+                                {% elif person.gender == 'F' %}{%trans 'Femenino'%}
+                                {% elif person.gender == 'M' %}{%trans 'Masculino'%}
+                                {% endif %}</td>
+                            <td><b>{%trans 'E-mail'%}</b>: {% if person.email %}{{ person.email }}{% else %}{%trans 'Desconocido'%}{% endif %}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div>
+                    <b>{%trans 'Más información'%}</b>: {% if person.notes %}{{ person.notes }}{% else %}{%trans 'Sin especificar'%}{% endif %}
+                    <br><b>{%trans 'Propietario del registro'%}</b>: {{ person.creator }}
+                    <br><b>{%trans 'Usuarios con permisos sobre el registro'%}</b>:
+                    <br>&nbsp;&nbsp;&nbsp;
+                    {% if user_with_perms %}
+                        {% for user in user_with_perms %}
+                            {{ user.username }}{% if not forloop.last %},{% else %}.{% endif %}
+                            {% if forloop.counter == 4 %}<br>&nbsp;&nbsp;&nbsp;{% endif %}
+                        {% endfor %}
+                    {% else %}
+                        {%trans 'Ninguno'%}.
+                    {% endif %}
+                </div>
+
+                <div class="person-form">
+                    <a href="/editor?link_id={{ person.id }}"><img class="person-sidetree-icon" src="{% static 'images/sidetree_icon.png' %}" alt=""></a>
+                    <form action={{ '/person/'|add:person.id }} >
+                        {%trans 'Generaciones'%}:
+                        <input type="number" name="generations" min="0" max="7" value={{ form.generations }} style="max-width:131px;">
+                        <br>{%trans 'Mostrar hacia'%}:
+                        <select name="direction">
+                            <option value="UD" {% if form.direction == 'UD' %}selected{% endif %} >{%trans 'Arriba y abajo'%}</option>
+                            <option value="U" {% if form.direction == 'U' %}selected{% endif %} >{%trans 'Arriba'%}</option>
+                            <option value="D" {% if form.direction == 'D' %}selected{% endif %} >{%trans 'Abajo'%}</option>
+                        </select>
+                        <br>
+                        <input type="submit" value={%trans 'Aceptar'%}> &nbsp;
+                    </form>
+                </div>
+
+                <br><button id="print-person-generations">{%trans 'Imprimir parientes' %}</button>
+
+                <p id="person-relatives-title"><b>{%trans 'Parientes de '%} {{ person.name }} {{ person.surname }}:</b></p>
+
+                <div id="person-generations">
+                    {% if data.up != None %}
+                        <b>{%trans 'Ascendencia'%}:</b><br>
+                            {% if data.up|length == 0 %}
+                                {%trans 'Sin datos.' %}<br>
+                            {% endif %}
+                            {% for key, values in data.up.items %}
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull;{{key|safe}} <br>
+                                {% for v in values %}
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-{{v}}<br>
+                                {% endfor %}
+                                <br>
+                            {% endfor %}
+                    {% endif %}
+
+                    {% if data.down != None %}
+                        <b>{%trans 'Descendientes y parejas'%}:</b><br>
+                        {% if data.down|length == 0 %}
+                            {%trans 'Sin datos.' %}<br>
+                        {% endif %}
+                        {% for key, values in data.down.items %}
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull;{{key|safe}} <br>
+                            {% for v in values %}
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-{{v|safe}}<br>
+                            {% endfor %}
+                            <br>
+                        {% endfor %}
+                    {% endif %}
+
+                </div>
+
+            </div><br>
+
+    </div>
+
+{% endblock %}
