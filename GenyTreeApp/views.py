@@ -102,7 +102,11 @@ class EditorView(LoginRequiredMixin, View):
     def get(self, request):
         link_id = request.GET.get('link_id', '')
         if link_id == '':
-            link_id = Person.objects.first().id
+            p = Person.objects.first()
+            if p != None:
+                link_id = p.id
+            else:
+                link_id = 0
 
         return render(request, "editor.html", {'link_id': link_id})
 
@@ -280,7 +284,7 @@ class PersonView(LoginRequiredMixin, View):
 
         tree_person = Person.objects.filter(id=body['tree_id']).first()
         if tree_person is None:
-            return JsonResponse({'Error': 'Raiz epecificada para el arbol no disponible, seleccione otra persona en'
+            return JsonResponse({'Error': 'Raíz epecificada para el arbol no disponible, seleccione otra persona en'
                                           ' la pantalla personas'}, status=204)
 
         ##TODO handle possible exception when accessing the dictionary
@@ -331,7 +335,7 @@ class PersonView(LoginRequiredMixin, View):
         person.delete()
 
         if request.body.decode('utf-8') == '':
-            return JsonResponse({'Error': 'Nueva raiz para el arbol no especificada'}, status=204)
+            return JsonResponse({'Error': 'Nueva raíz para el arbol no especificada'}, status=204)
 
         try:
             body = json.loads(request.body.decode('utf-8'))
@@ -443,7 +447,7 @@ class PersonListView(LoginRequiredMixin, View):
         else:
             tree_person = new_person
         if tree_person is None:
-            return JsonResponse({'Error': 'Raiz epecificada para el arbol no disponible, seleccione otra persona'}, status=204)
+            return JsonResponse({'Error': 'Raíz epecificada para el arbol no disponible, seleccione otra persona'}, status=204)
 
         ##TODO handle possible exception when accessing the dictionary
         direction = body['tree_dir']

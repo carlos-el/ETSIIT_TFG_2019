@@ -1620,7 +1620,7 @@ function (_React$Component8) {
       if (link_id > 0) this.fetchData({
         method: 'GET',
         person_id: link_id
-      });else this.setError('Raiz del árbol no especificada o incorrecta, vaya a la lista de personas para seleccionar una.');
+      });else this.setError('Raíz del árbol no especificada o incorrecta, cree una nueva persona o vaya a la lista de personas para seleccionar una.');
       this.loadFunctions();
       /*$("#download-tree-button").click(function(){
             var element = document.querySelector("#tree-wrapper")

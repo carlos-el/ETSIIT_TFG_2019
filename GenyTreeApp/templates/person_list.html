@@ -63,6 +63,10 @@
                 <button class="person-data-readmore-button" style="display: none;">{%trans 'Leer menos'%} &#9650;</button>
             </div><br>
 
+        {% empty %}
+            <br><br><br><br>
+            <b>{%trans 'No hay personas en el sistema. Dirigete al editor para crear nuevos registros'%}.</b>
+            <br><br><br><br>
         {% endfor %}
 
         <div class="paginator">
