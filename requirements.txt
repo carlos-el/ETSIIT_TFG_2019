@@ -4,6 +4,6 @@ mysqlclient==1.4.2.post1
 pkg-resources==0.0.0
 python-magic==0.4.15
 pytz==2019.2
-sqlparse==0.3.0
+sqlparse==0.4.4
 
 #Python version = 3.6.8
